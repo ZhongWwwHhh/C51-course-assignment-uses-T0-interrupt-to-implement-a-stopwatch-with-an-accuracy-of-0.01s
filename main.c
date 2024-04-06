@@ -15,7 +15,7 @@ sbit kLine0 = P3 ^ 3;
 sbit kLine1 = P3 ^ 4;
 sbit kLine2 = P3 ^ 5;
 sbit kLine3 = P3 ^ 6;
-sbit kLine4 = P2 ^ 7;
+sbit kLine4 = P3 ^ 7;
 
 // 时间记录
 char time[4] = {0};
@@ -49,8 +49,8 @@ void main()
     buzzer = 1;
     // 中断
     TMOD = 0x01;
-    TH0 = (65536 - 922) / 256;
-    TL0 = (65536 - 922) % 256;
+    TH0 = (65536 - 9216) / 256;
+    TL0 = (65536 - 9216) % 256;
     EA = 1;
     ET0 = 1;
     TR0 = 0;
@@ -133,11 +133,13 @@ void main()
                 {
                     // 小数秒增
                     timeCount(1);
+                    buzzer = 1;
                 }
                 else if (1 == kStatusNew[1])
                 {
                     // 小数秒减
                     timeCount(-1);
+                    buzzer = 1;
                 }
             }
         }
@@ -180,8 +182,8 @@ void main()
 void T0_time() interrupt 1
 {
     // 重装初值
-    TH0 = (65536 - 922) / 256;
-    TL0 = (65536 - 922) % 256;
+    TH0 = (65536 - 9216) / 256;
+    TL0 = (65536 - 9216) % 256;
     // 走时
     if (1 == countStatus || -1 == countStatus)
     {
@@ -278,12 +280,9 @@ void timeCount(char direction)
                         time[1] = 9;
                         time[2] = 9;
                         time[3] = 9;
-                        if (1 == countStatus)
-                        {
-                            // 正计时结束
-                            TR0 = 0;
-                            buzzer = 0;
-                        }
+                        // 正计时结束
+                        TR0 = 0;
+                        buzzer = 0;
                     }
                 }
             }
@@ -312,12 +311,9 @@ void timeCount(char direction)
                         time[1] = 0;
                         time[2] = 0;
                         time[3] = 0;
-                        if (-1 == countStatus)
-                        {
-                            // 倒计时结束
-                            TR0 = 0;
-                            buzzer = 0;
-                        }
+                        // 倒计时结束
+                        TR0 = 0;
+                        buzzer = 0;
                     }
                 }
             }
