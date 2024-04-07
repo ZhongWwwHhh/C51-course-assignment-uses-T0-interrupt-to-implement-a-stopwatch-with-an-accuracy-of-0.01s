@@ -196,7 +196,7 @@ void showNum(unsigned char number, bit dp, unsigned char choose)
     P0 = order[choose - 1];
     wle = 1;
     wle = 0;
-    P0 = num[number] + (dp ? 8 : 0);
+    P0 = num[number] + (dp ? 0x80 : 0x00);
     dle = 1;
     dle = 0;
     P0 = 0x00;
